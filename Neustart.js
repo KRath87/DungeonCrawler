@@ -11,43 +11,71 @@ let map = [
 ];
 
 const held = { x: 1, y: 1 };
-const offset = { x: 0, y: 0 };
 
 for (let health = 5000; health >= 0; ) {
   for (let i = 0; i < map.length; i++) {
     let row = "";
+
     for (let j = 0; j < map[i].length; j++) {
       if (i === held.y && j === held.x) {
-        row += "߷";
+        row += " X ";
       } else {
-        row += "▢";
+        row += " ▢ ";
       }
     }
 
     console.log(row);
   }
-
-  //   if (held.x > offset.x + map[i][j] || held.y > offset.y + map.length) {
-  //     map.push("1");
-  //   }
   move();
 }
 
 function move() {
   let dec1 = prompt("Wohin willst du gehen? ");
+
   if (dec1.toLowerCase() === "w") {
-    held.y -= 1;
+    if (held.y === 0) {
+      map.unshift(map[0]);
+      held.y++;
+    }
+
+    held.y--;
   } else if (dec1.toLowerCase() === "s") {
-    held.y += 1;
+    if (held.y === map.length - 1) {
+      map.push(map[0]);
+    }
+    held.y++;
   } else if (dec1.toLowerCase() === "a") {
-    held.x -= 1;
+    if (held.x === 0) {
+      for (let i = 0; i < map.length; i++) {
+        map[i].unshift("");
+      }
+      held.x++;
+    }
+    held.x--;
   } else if (dec1.toLowerCase() === "d") {
-    held.x += 1;
+    if (held.x === map[0].length - 1) {
+      for (let i = 0; i < map.length; i++) {
+        map[i].push("");
+      }
+    }
+    held.x++;
   } else {
     move();
+    endofmap();
   }
 }
 
-// function expansion() {
-
-// }
+function endofmap() {
+  for (let c = 0; c < map.length; c++) {
+    for (let d = 0; d < map[c].length; d++) {
+      if (held.x < 0 || held.y <= 0) {
+        let e = map[c].length + 1;
+        let f = map[c].length - 1;
+        map[c].push(0);
+        map[c][e] = map[c][f];
+      }
+    }
+    // } else {
+    //   return false;
+  }
+}
